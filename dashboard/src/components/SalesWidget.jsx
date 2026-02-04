@@ -200,7 +200,13 @@ function SalesWidget({ user, onSaleSuccess }) {
             </div>
 
             {/* Bottom Order Bar (Fixed Structure) */}
-            <div className="bottom-bar" style={{ height: '180px', padding: '16px 24px' }}>
+            <div className="bottom-bar glass" style={{
+                height: '180px',
+                padding: '16px 24px',
+                background: 'rgba(0,0,0,0.4)',
+                backdropFilter: 'blur(20px)',
+                borderTop: '1px solid rgba(255,255,255,0.1)'
+            }}>
                 {/* Scrollable Bill Section */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
@@ -219,10 +225,10 @@ function SalesWidget({ user, onSaleSuccess }) {
                             </div>
                         ) : (
                             items.map(item => (
-                                <div key={item.product_id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <div style={{ width: '24px', fontWeight: '900', color: 'var(--accent)', fontSize: '13px' }}>{item.quantity}x</div>
-                                    <div style={{ flex: 1, fontSize: '13px', fontWeight: '500' }}>{item.product_name}</div>
-                                    <div style={{ fontSize: '13px', opacity: 0.8 }}>₡{(item.price * item.quantity).toLocaleString()}</div>
+                                <div key={item.product_id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                    <div style={{ width: '30px', fontWeight: '900', color: 'var(--accent)', fontSize: '16px' }}>{item.quantity}x</div>
+                                    <div style={{ flex: 1, fontSize: '16px', fontWeight: '600' }}>{item.product_name}</div>
+                                    <div style={{ fontSize: '16px', opacity: 0.9 }}>₡{(item.price * item.quantity).toLocaleString()}</div>
                                     <div style={{ display: 'flex', gap: '4px' }}>
                                         <button onClick={() => updateQuantity(item.product_id, -1)} className="qty-btn-small"><Minus size={10} /></button>
                                         <button onClick={() => updateQuantity(item.product_id, 1)} className="qty-btn-small"><Plus size={10} /></button>
@@ -258,14 +264,24 @@ function SalesWidget({ user, onSaleSuccess }) {
                             <span style={{ fontSize: '12px', fontWeight: '700', opacity: 0.6 }}>TOTAL</span>
                             <span style={{ fontSize: '1.8rem', fontWeight: '900', color: 'var(--accent)', lineHeight: 1 }}>₡{total.toLocaleString()}</span>
                         </div>
-                        <button
-                            className="btn-primary"
-                            style={{ width: '100%', height: '48px', fontSize: '15px', fontWeight: '800', borderRadius: '12px', boxShadow: '0 4px 20px rgba(255, 179, 0, 0.2)' }}
-                            onClick={handleSubmit}
-                            disabled={loading || items.length === 0}
-                        >
-                            {loading ? <Loader2 className="animate-spin" /> : 'FINALIZAR VENTA'}
-                        </button>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                            <button
+                                className="glass-btn"
+                                style={{ flex: 1, height: '48px', fontSize: '12px', fontWeight: '700', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
+                                onClick={() => alert('Función de Facturación Electrónica en desarrollo')}
+                                disabled={items.length === 0}
+                            >
+                                <Receipt size={14} /> Factura E.
+                            </button>
+                            <button
+                                className="btn-primary"
+                                style={{ flex: 2, height: '48px', fontSize: '15px', fontWeight: '800', borderRadius: '12px', boxShadow: '0 4px 20px rgba(255, 179, 0, 0.2)' }}
+                                onClick={handleSubmit}
+                                disabled={loading || items.length === 0}
+                            >
+                                {loading ? <Loader2 className="animate-spin" /> : 'FINALIZAR VENTA'}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
