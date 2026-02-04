@@ -8,7 +8,8 @@ import {
     LogOut,
     LayoutDashboard,
     PlusCircle,
-    Receipt
+    Receipt,
+    Trash2
 } from 'lucide-react';
 import SalesWidget from '../components/SalesWidget';
 
@@ -450,7 +451,7 @@ function Dashboard({ user, onLogout }) {
                 </div>
             )}
 
-            <style jsx>{`
+            <style>{`
                 .top-nav {
                     z-index: 1000;
                     position: sticky;
