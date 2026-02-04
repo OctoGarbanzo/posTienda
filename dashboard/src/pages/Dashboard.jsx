@@ -27,19 +27,22 @@ function Dashboard({ user, onLogout }) {
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
-        if (user.role === 'admin') {
-            fetchAllData();
-        }
+        fetchAllData();
     }, [paymentFilter]);
 
     const fetchAllData = async () => {
         setLoading(true);
-        await Promise.all([
-            fetchStats(),
-            fetchRecentSales(),
-            fetchTopProducts(),
-            fetchCategorySales()
-        ]);
+        if (user.role === 'admin') {
+            await Promise.all([
+                fetchStats(),
+                fetchRecentSales(),
+                fetchTopProducts(),
+                fetchCategorySales()
+            ]);
+        } else {
+            // Waiters only see recent sales (their own or general depending on backend)
+            await fetchRecentSales();
+        }
         setLoading(false);
     };
 
@@ -436,6 +439,31 @@ function Dashboard({ user, onLogout }) {
                 .glass-btn:hover {
                     background: rgba(255, 255, 255, 0.05) !important;
                     color: #fff !important;
+                }
+                .modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.85);
+                    backdrop-filter: blur(10px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 2000;
+                    padding: 20px;
+                }
+                @media (max-width: 768px) {
+                    .modal-overlay {
+                        align-items: flex-end;
+                        padding: 0;
+                    }
+                    .modal-overlay > .glass {
+                        border-radius: 32px 32px 0 0 !important;
+                        width: 100% !important;
+                        max-width: none !important;
+                    }
                 }
             `}</style>
         </div>
