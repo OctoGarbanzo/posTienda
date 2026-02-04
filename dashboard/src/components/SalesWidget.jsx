@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Plus, Minus, ShoppingCart, Loader2, Search, Receipt, Trash2, X } from 'lucide-react';
 
 function SalesWidget({ user, onSaleSuccess }) {
@@ -17,10 +17,7 @@ function SalesWidget({ user, onSaleSuccess }) {
 
     const fetchProducts = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get('/api/sales/products', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await api.get('/sales/products');
             setProducts(response.data);
         } catch (err) {
             console.error('Error fetching products', err);
@@ -56,13 +53,10 @@ function SalesWidget({ user, onSaleSuccess }) {
         if (items.length === 0) return;
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.post('/api/sales', {
+            const response = await api.post('/sales', {
                 items,
                 total_amount: total,
                 payment_method: paymentMethod
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
             });
 
             const saleData = {

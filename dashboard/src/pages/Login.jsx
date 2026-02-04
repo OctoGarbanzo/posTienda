@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { LogIn, Loader2 } from 'lucide-react';
 
 function Login({ onLogin }) {
@@ -14,7 +14,7 @@ function Login({ onLogin }) {
         setError('');
 
         try {
-            const response = await axios.post('/api/auth/login', { username, password });
+            const response = await api.post('/auth/login', { username, password });
             localStorage.setItem('token', response.data.token);
             onLogin(response.data.user);
         } catch (err) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { UserPlus, Calendar, DollarSign, Loader2 } from 'lucide-react';
 
 function EmployeeManagement() {
@@ -14,10 +14,7 @@ function EmployeeManagement() {
 
     const fetchEmployees = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get('/api/employees', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await api.get('/employees');
             setEmployees(response.data);
         } catch (err) {
             console.error('Error fetching employees');
@@ -28,13 +25,10 @@ function EmployeeManagement() {
         e.preventDefault();
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
-            await axios.post('/api/employees', {
+            await api.post('/employees', {
                 name,
                 daily_salary: parseFloat(salary),
                 hire_date: new Date().toISOString().split('T')[0]
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
             });
             setName('');
             setSalary('');
@@ -48,22 +42,12 @@ function EmployeeManagement() {
 
     const registerWorkLog = async (employeeId, daysWorked, dailySalary) => {
         try {
-            const token = localStorage.getItem('token');
-            const totalPayment = daysWorked * dailySalary;
-            const today = new Date().toISOString().split('T')[0];
-            // Simple period calculation: last 7 days
-            const lastWeek = new Date();
-            lastWeek.setDate(lastWeek.getDate() - 7);
-            const periodStart = lastWeek.toISOString().split('T')[0];
-
-            await axios.post('/api/employees/work-log', {
+            await api.post('/employees/work-log', {
                 employee_id: employeeId,
                 days_worked: parseInt(daysWorked),
                 period_start: periodStart,
                 period_end: today,
                 total_payment: totalPayment
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
             });
             alert('Pago/Dias registrados con éxito. Total: ₡' + totalPayment.toLocaleString());
         } catch (err) {
@@ -73,13 +57,10 @@ function EmployeeManagement() {
 
     const registerCesantia = async (employeeId, amount) => {
         try {
-            const token = localStorage.getItem('token');
-            await axios.post('/api/employees/cesantias', {
+            await api.post('/employees/cesantias', {
                 employee_id: employeeId,
                 amount: parseFloat(amount),
                 date: new Date().toISOString().split('T')[0]
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
             });
             alert('Cesantía registrada con éxito');
         } catch (err) {

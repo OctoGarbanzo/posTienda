@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import {
     BarChart3,
     ShoppingCart,
@@ -26,10 +26,7 @@ function Dashboard({ user, onLogout }) {
 
     const fetchStats = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get('/api/sales/totals', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await api.get('/sales/totals');
             setStats(response.data);
         } catch (err) {
             console.error('Error fetching stats', err);
@@ -38,10 +35,7 @@ function Dashboard({ user, onLogout }) {
 
     const fetchRecentSales = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get('/api/sales', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await api.get('/sales');
             setRecentSales(response.data);
         } catch (err) {
             console.error('Error fetching recent sales', err);

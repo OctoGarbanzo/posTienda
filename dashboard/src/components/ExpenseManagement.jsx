@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { CreditCard, Tag, DollarSign, Loader2 } from 'lucide-react';
 
 function ExpenseManagement() {
@@ -15,10 +15,7 @@ function ExpenseManagement() {
 
     const fetchExpenses = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get('/api/expenses', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await api.get('/expenses');
             setExpenses(response.data);
         } catch (err) {
             console.error('Error fetching expenses');
