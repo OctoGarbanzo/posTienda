@@ -184,6 +184,50 @@ router.get('/', verifyToken, async (req, res) => {
     }
 });
 
+// Get items for a specific sale
+router.get('/:saleId/items', verifyToken, async (req, res) => {
+    try {
+        const { saleId } = req.params;
+        const { data: items, error } = await db
+            .from('sale_items')
+            .select('*')
+            .eq('sale_id', saleId);
+
+        if (error) throw error;
+        res.json(items);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener items de la venta' });
+    }
+});
+
+// Delete a sale (Admin only)
+router.delete('/:saleId', verifyToken, isAdmin, async (req, res) => {
+    try {
+        const { saleId } = req.params;
+
+        // Items will be deleted automatically if CASCADE is setup, 
+        // but we delete them manually just in case or to be explicit
+        const { error: itemsError } = await db
+            .from('sale_items')
+            .delete()
+            .eq('sale_id', saleId);
+
+        if (itemsError) throw itemsError;
+
+        const { error } = await db
+            .from('sales')
+            .delete()
+            .eq('id', saleId);
+
+        if (error) throw error;
+        res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al eliminar la venta' });
+    }
+});
+
 // List products
 router.get('/products', verifyToken, async (req, res) => {
     try {

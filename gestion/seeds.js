@@ -25,11 +25,20 @@ async function seed() {
         const waiterExists = users.some(u => u.username === 'mesero');
         if (!waiterExists) {
             const hashedPassword = bcrypt.hashSync('mesero123', 10);
-            const { error } = await db.from('users').insert([
+            await db.from('users').insert([
                 { username: 'mesero', password: hashedPassword, role: 'waiter' }
             ]);
-            if (error) console.error('Error creating waiter:', error.message);
-            else console.log('Initial waiter created: mesero / mesero123');
+            console.log('Initial waiter created: mesero / mesero123');
+        }
+
+        const waiter1Exists = users.some(u => u.username === 'mesero1');
+        if (!waiter1Exists) {
+            const hashedPassword = bcrypt.hashSync('tiento2026', 10);
+            const { error } = await db.from('users').insert([
+                { username: 'mesero1', password: hashedPassword, role: 'waiter' }
+            ]);
+            if (error) console.error('Error creating waiter1:', error.message);
+            else console.log('New waiter created: mesero1 / tiento2026');
         }
     }
 

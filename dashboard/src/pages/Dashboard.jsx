@@ -21,6 +21,10 @@ function Dashboard({ user, onLogout }) {
     const [topProducts, setTopProducts] = useState([]);
     const [categorySales, setCategorySales] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [selectedSale, setSelectedSale] = useState(null);
+    const [saleItems, setSaleItems] = useState([]);
+    const [showSaleModal, setShowSaleModal] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         if (user.role === 'admin') {
@@ -73,6 +77,33 @@ function Dashboard({ user, onLogout }) {
             setRecentSales(response.data);
         } catch (err) {
             console.error('Error fetching recent sales', err);
+        }
+    };
+
+    const viewSaleDetails = async (sale) => {
+        try {
+            setSelectedSale(sale);
+            setShowSaleModal(true);
+            const response = await api.get(`/sales/${sale.id}/items`);
+            setSaleItems(response.data);
+        } catch (err) {
+            console.error('Error fetching sale items', err);
+        }
+    };
+
+    const deleteSale = async (saleId) => {
+        if (!window.confirm('¿Estás seguro de eliminar esta venta? Esta acción no se puede deshacer.')) return;
+
+        setIsDeleting(true);
+        try {
+            await api.delete(`/sales/${saleId}`);
+            setShowSaleModal(false);
+            fetchAllData();
+            alert('Venta eliminada correctamente');
+        } catch (err) {
+            alert('Error al eliminar la venta');
+        } finally {
+            setIsDeleting(false);
         }
     };
 
@@ -286,8 +317,25 @@ function Dashboard({ user, onLogout }) {
                                                             <div style={{ fontSize: '10px', opacity: 0.5 }}>{new Date(sale.created_at).toLocaleString()} • <span style={{ color: 'var(--accent)' }}>{sale.payment_method}</span></div>
                                                         </div>
                                                     </div>
-                                                    <div style={{ fontWeight: '800', color: 'var(--text-primary)', fontSize: '1.1rem' }}>
-                                                        ₡{Number(sale.total_amount).toLocaleString()}
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                                                        <div style={{ fontWeight: '800', color: 'var(--text-primary)', fontSize: '1.1rem' }}>
+                                                            ₡{Number(sale.total_amount).toLocaleString()}
+                                                        </div>
+                                                        <button
+                                                            onClick={() => viewSaleDetails(sale)}
+                                                            className="glass-btn"
+                                                            style={{ padding: '6px 12px', borderRadius: '8px', fontSize: '11px', border: '1px solid var(--accent)', color: 'var(--accent)', cursor: 'pointer' }}
+                                                        >
+                                                            VER
+                                                        </button>
+                                                        {user.role === 'admin' && (
+                                                            <button
+                                                                onClick={() => deleteSale(sale.id)}
+                                                                style={{ background: 'none', border: 'none', color: 'var(--error)', cursor: 'pointer', opacity: 0.6 }}
+                                                            >
+                                                                <Trash2 size={16} />
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 </div>
                                             ))}
@@ -307,6 +355,82 @@ function Dashboard({ user, onLogout }) {
                     )}
                 </div>
             </main>
+
+            {/* Sale Details Modal */}
+            {showSaleModal && selectedSale && (
+                <div className="modal-overlay animate-fade">
+                    <div className="glass" style={{ width: '90%', maxWidth: '500px', padding: '32px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+                            <div>
+                                <h2 style={{ margin: 0 }}>Venta #{selectedSale.id}</h2>
+                                <p style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>{new Date(selectedSale.created_at).toLocaleString()}</p>
+                            </div>
+                            <button
+                                onClick={() => setShowSaleModal(false)}
+                                className="glass-btn"
+                                style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
+                            >
+                                <PlusCircle style={{ transform: 'rotate(45deg)' }} size={24} />
+                            </button>
+                        </div>
+
+                        <div style={{ marginBottom: '24px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-secondary)', paddingBottom: '8px', borderBottom: '1px solid var(--border)' }}>
+                                <span>PRODUCTO</span>
+                                <span>SUBTOTAL</span>
+                            </div>
+                            <div style={{ maxHeight: '300px', overflowY: 'auto', padding: '12px 0' }}>
+                                {saleItems.length === 0 ? (
+                                    <p style={{ textAlign: 'center', opacity: 0.5 }}>Cargando detalles...</p>
+                                ) : (
+                                    saleItems.map((item, idx) => (
+                                        <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+                                            <div>
+                                                <div style={{ fontWeight: '600', fontSize: '14px' }}>{item.product_name}</div>
+                                                <div style={{ fontSize: '12px', opacity: 0.6 }}>{item.quantity} x ₡{Number(item.price).toLocaleString()}</div>
+                                            </div>
+                                            <div style={{ fontWeight: '700' }}>
+                                                ₡{(item.quantity * item.price).toLocaleString()}
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="glass" style={{ padding: '20px', borderRadius: '16px', marginBottom: '24px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
+                                <span>Método de Pago</span>
+                                <span style={{ color: 'var(--accent)', fontWeight: '700' }}>{selectedSale.payment_method}</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.5rem', fontWeight: '800', borderTop: '1px solid var(--border)', paddingTop: '12px' }}>
+                                <span>TOTAL</span>
+                                <span style={{ color: 'var(--accent)' }}>₡{Number(selectedSale.total_amount).toLocaleString()}</span>
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '12px' }}>
+                            <button
+                                onClick={() => setShowSaleModal(false)}
+                                className="glass-btn"
+                                style={{ flex: 1, padding: '12px', borderRadius: '12px', cursor: 'pointer' }}
+                            >
+                                Cerrar
+                            </button>
+                            {user.role === 'admin' && (
+                                <button
+                                    onClick={() => deleteSale(selectedSale.id)}
+                                    disabled={isDeleting}
+                                    className="btn-primary"
+                                    style={{ flex: 1, backgroundColor: 'var(--error)', border: 'none' }}
+                                >
+                                    {isDeleting ? 'Borrando...' : 'Eliminar Venta'}
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <style jsx>{`
                 .glass-btn:hover {
