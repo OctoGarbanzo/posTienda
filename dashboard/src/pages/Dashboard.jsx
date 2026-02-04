@@ -176,11 +176,26 @@ function Dashboard({ user, onLogout }) {
                             <h2 className="title-amber" style={{ margin: 0 }}>TIENTO POS</h2>
                             <button
                                 onClick={() => setActiveTab('dashboard')}
-                                className="glass-btn"
-                                style={{ border: 'none', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+                                className="glass-btn btn-nav-return"
+                                style={{
+                                    border: '1px solid var(--accent)',
+                                    background: 'var(--accent-glow)',
+                                    color: 'var(--accent)',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '8px 16px',
+                                    borderRadius: '10px',
+                                    fontSize: '13px',
+                                    fontWeight: '700',
+                                    position: 'relative',
+                                    zIndex: 1010
+                                }}
                             >
-                                <LayoutDashboard size={18} /> Salir a Dashboard
+                                <LayoutDashboard size={18} /> VOLVER AL DASHBOARD
                             </button>
+                            <span style={{ fontSize: '10px', opacity: 0.3, marginLeft: '10px' }}>v2.2</span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                             <span style={{ fontSize: '14px', opacity: 0.7 }}>Usuario: <b>{user.username}</b></span>
@@ -436,6 +451,16 @@ function Dashboard({ user, onLogout }) {
             )}
 
             <style jsx>{`
+                .top-nav {
+                    z-index: 1000;
+                    position: sticky;
+                    top: 0;
+                }
+                .btn-nav-return:hover {
+                    background: var(--accent) !important;
+                    color: #000 !important;
+                    transform: scale(1.05);
+                }
                 .glass-btn:hover {
                     background: rgba(255, 255, 255, 0.05) !important;
                     color: #fff !important;
