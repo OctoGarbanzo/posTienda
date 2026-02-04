@@ -16,20 +16,53 @@ function Dashboard({ user, onLogout }) {
     const [stats, setStats] = useState({ daily: 0, monthly: 0 });
     const [activeTab, setActiveTab] = useState('sales');
     const [recentSales, setRecentSales] = useState([]);
+    const [paymentFilter, setPaymentFilter] = useState('Todos');
+    const [topProducts, setTopProducts] = useState([]);
+    const [categorySales, setCategorySales] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (user.role === 'admin') {
-            fetchStats();
-            fetchRecentSales();
+            fetchAllData();
         }
-    }, []);
+    }, [paymentFilter]);
+
+    const fetchAllData = async () => {
+        setLoading(true);
+        await Promise.all([
+            fetchStats(),
+            fetchRecentSales(),
+            fetchTopProducts(),
+            fetchCategorySales()
+        ]);
+        setLoading(false);
+    };
 
     const fetchStats = async () => {
         try {
-            const response = await api.get('/sales/totals');
+            const url = paymentFilter === 'Todos' ? '/sales/totals' : `/sales/totals?payment_method=${paymentFilter}`;
+            const response = await api.get(url);
             setStats(response.data);
         } catch (err) {
             console.error('Error fetching stats', err);
+        }
+    };
+
+    const fetchTopProducts = async () => {
+        try {
+            const response = await api.get('/sales/stats/most-sold');
+            setTopProducts(response.data);
+        } catch (err) {
+            console.error('Error top products', err);
+        }
+    };
+
+    const fetchCategorySales = async () => {
+        try {
+            const response = await api.get('/sales/stats/by-category');
+            setCategorySales(response.data);
+        } catch (err) {
+            console.error('Error category stats', err);
         }
     };
 
@@ -126,9 +159,32 @@ function Dashboard({ user, onLogout }) {
                 <div className="content-scroll" style={{ padding: activeTab === 'sales' ? '0' : '24px 32px' }}>
                     {activeTab === 'dashboard' ? (
                         <div className="animate-fade">
-                            <header style={{ marginBottom: '32px' }}>
-                                <h1 style={{ fontSize: '2.5rem', fontWeight: '800' }}>Dashboard</h1>
-                                <p style={{ color: 'var(--text-secondary)' }}>Resumen general del negocio</p>
+                            <header style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                                <div>
+                                    <h1 style={{ fontSize: '2.5rem', fontWeight: '800', lineHeight: 1.2 }}>Dashboard</h1>
+                                    <p style={{ color: 'var(--text-secondary)' }}>Resumen general del negocio</p>
+                                </div>
+                                <div className="glass" style={{ padding: '8px', borderRadius: '12px', display: 'flex', gap: '4px' }}>
+                                    {['Todos', 'Efectivo', 'Sinpe', 'Tarjeta'].map(m => (
+                                        <button
+                                            key={m}
+                                            onClick={() => setPaymentFilter(m)}
+                                            style={{
+                                                padding: '6px 12px',
+                                                borderRadius: '8px',
+                                                border: 'none',
+                                                background: paymentFilter === m ? 'var(--accent)' : 'transparent',
+                                                color: paymentFilter === m ? '#000' : 'var(--text-secondary)',
+                                                fontSize: '12px',
+                                                fontWeight: '700',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.2s'
+                                            }}
+                                        >
+                                            {m}
+                                        </button>
+                                    ))}
+                                </div>
                             </header>
 
                             {user.role === 'admin' && (
@@ -138,9 +194,10 @@ function Dashboard({ user, onLogout }) {
                                             <div style={{ background: 'var(--accent-glow)', padding: '10px', borderRadius: '12px' }}>
                                                 <DollarSign size={24} color="var(--accent)" />
                                             </div>
-                                            <span style={{ color: 'var(--text-secondary)', fontWeight: '600' }}>Ventas Hoy</span>
+                                            <span style={{ color: 'var(--text-secondary)', fontWeight: '600' }}>Ventas Hoy {paymentFilter !== 'Todos' && `(${paymentFilter})`}</span>
                                         </div>
                                         <h2 style={{ fontSize: '2.5rem', fontWeight: '800' }}>₡{stats.daily.toLocaleString()}</h2>
+                                        <div style={{ fontSize: '11px', opacity: 0.6, marginTop: '8px' }}>Ingresos registrados hoy</div>
                                     </div>
 
                                     <div className="glass card">
@@ -148,12 +205,48 @@ function Dashboard({ user, onLogout }) {
                                             <div style={{ background: 'var(--accent-glow)', padding: '10px', borderRadius: '12px' }}>
                                                 <BarChart3 size={24} color="var(--accent)" />
                                             </div>
-                                            <span style={{ color: 'var(--text-secondary)', fontWeight: '600' }}>Ventas Mes</span>
+                                            <span style={{ color: 'var(--text-secondary)', fontWeight: '600' }}>Ventas Mes {paymentFilter !== 'Todos' && `(${paymentFilter})`}</span>
                                         </div>
                                         <h2 style={{ fontSize: '2.5rem', fontWeight: '800' }}>₡{stats.monthly.toLocaleString()}</h2>
+                                        <div style={{ fontSize: '11px', opacity: 0.6, marginTop: '8px' }}>Total acumulado del mes actual</div>
                                     </div>
                                 </div>
                             )}
+
+                            <div className="grid-layout" style={{ marginBottom: '32px', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+                                <div className="glass card">
+                                    <h3 style={{ marginBottom: '20px' }}>Más Vendidos</h3>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                        {topProducts.length === 0 ? <p style={{ opacity: 0.5, fontSize: '13px' }}>Cargando datos...</p> :
+                                            topProducts.map((p, idx) => (
+                                                <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <span style={{ fontSize: '14px', flex: 1 }}>{p.product_name}</span>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                        <div className="glass" style={{ width: '80px', height: '6px', borderRadius: '3px', overflow: 'hidden' }}>
+                                                            <div style={{ width: `${(p.total_qty / topProducts[0].total_qty) * 100}%`, height: '100%', background: 'var(--accent)' }}></div>
+                                                        </div>
+                                                        <span style={{ fontWeight: '800', fontSize: '14px', width: '30px', textAlign: 'right' }}>{p.total_qty}</span>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+
+                                <div className="glass card">
+                                    <h3 style={{ marginBottom: '20px' }}>Ingresos por Categoría</h3>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                        {categorySales.length === 0 ? <p style={{ opacity: 0.5, fontSize: '13px' }}>Cargando datos...</p> :
+                                            categorySales.sort((a, b) => b.total - a.total).map((cat, idx) => (
+                                                <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <span style={{ fontSize: '14px' }}>{cat.category}</span>
+                                                    <span style={{ fontWeight: '700', fontSize: '14px', color: 'var(--accent)' }}>₡{cat.total.toLocaleString()}</span>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
 
                             <div className="glass card">
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
