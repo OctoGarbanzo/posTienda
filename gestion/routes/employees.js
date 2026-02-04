@@ -5,11 +5,11 @@ const { verifyToken, isAdmin } = require('../middleware/auth');
 
 // Add employee
 router.post('/', verifyToken, isAdmin, async (req, res) => {
-    const { name, daily_salary, hire_date } = req.body;
+    const { name, daily_salary, hire_date, cedula, position, contract_type, payment_type } = req.body;
     try {
         const { data: employee, error } = await db
             .from('employees')
-            .insert([{ name, daily_salary, hire_date }])
+            .insert([{ name, daily_salary, hire_date, cedula, position, contract_type, payment_type }])
             .select()
             .single();
 
@@ -72,20 +72,108 @@ router.get('/', verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-// Get work logs for an employee
-router.get('/:id/work-logs', verifyToken, isAdmin, async (req, res) => {
+// Calculate settlement (Preview)
+router.get('/:id/calculate-settlement', verifyToken, isAdmin, async (req, res) => {
     try {
-        const { data: logs, error } = await db
-            .from('employee_work_logs')
+        const { id } = req.params;
+        const { exit_date } = req.query;
+
+        const { data: employee, error } = await db
+            .from('employees')
             .select('*')
-            .eq('employee_id', req.params.id)
-            .order('period_end', { ascending: false });
+            .eq('id', id)
+            .single();
 
         if (error) throw error;
-        res.json(logs);
+
+        const entry = new Date(employee.hire_date);
+        const exit = exit_date ? new Date(exit_date) : new Date();
+
+        // Aguinaldo Calculation (December to November period)
+        // For simplicity: calculate from hire or previous Dec 1st
+        const currentYear = exit.getFullYear();
+        let aguinaldoStart = new Date(currentYear - 1, 11, 1); // Dec 1st previous year
+        if (entry > aguinaldoStart) aguinaldoStart = entry;
+
+        const daysForAguinaldo = Math.ceil((exit - aguinaldoStart) / (1000 * 60 * 60 * 24));
+
+        // Fetch work logs for the breakdown
+        const { data: logs, error: lError } = await db
+            .from('employee_work_logs')
+            .select('period_end, total_payment')
+            .eq('employee_id', id)
+            .gte('period_end', aguinaldoStart.toISOString().split('T')[0])
+            .lte('period_end', exit.toISOString().split('T')[0]);
+
+        if (lError) throw lError;
+
+        const breakdown = logs.reduce((acc, log) => {
+            const date = new Date(log.period_end);
+            const monthName = date.toLocaleString('es-ES', { month: 'long', year: 'numeric' }).toUpperCase();
+            acc[monthName] = (acc[monthName] || 0) + Number(log.total_payment);
+            return acc;
+        }, {});
+
+        const aguinaldoTotal = Object.values(breakdown).reduce((a, b) => a + b, 0);
+        const aguinaldo = aguinaldoTotal / 12;
+
+        // Cesantía Calculation (simplified rules)
+        // 3-6 months: 7 days
+        // 6-12 months: 14 days
+        // 1 year+: 19.5 days per year (approximate)
+        const diffMs = exit - entry;
+        const diffMonths = diffMs / (1000 * 60 * 60 * 24 * 30.44);
+        let cesantiaDays = 0;
+
+        if (diffMonths >= 3 && diffMonths < 6) cesantiaDays = 7;
+        else if (diffMonths >= 6 && diffMonths < 12) cesantiaDays = 14;
+        else if (diffMonths >= 12) {
+            cesantiaDays = (diffMs / (1000 * 60 * 60 * 24 * 365)) * 19.5;
+        }
+
+        const cesantia = employee.daily_salary * cesantiaDays;
+
+        res.json({
+            employee,
+            aguinaldo: Math.round(aguinaldo * 100) / 100,
+            aguinaldoTotal: Math.round(aguinaldoTotal * 100) / 100,
+            breakdown,
+            cesantia: Math.round(cesantia * 100) / 100,
+            total: Math.round((aguinaldo + cesantia) * 100) / 100,
+            dates: { entry, exit }
+        });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Error al obtener registros de trabajo' });
+        res.status(500).json({ error: 'Error al calcular liquidación' });
+    }
+});
+
+// Finalize settlement
+router.post('/:id/settle', verifyToken, isAdmin, async (req, res) => {
+    const { id } = req.params;
+    const { exit_date, aguinaldo, cesantia, total, notes } = req.body;
+    try {
+        // Update employee exit date
+        await db.from('employees').update({ exit_date }).eq('id', id);
+
+        // Record settlement
+        const { data, error } = await db
+            .from('settlements')
+            .insert([{
+                employee_id: id,
+                aguinaldo_amount: aguinaldo,
+                cesantia_amount: cesantia,
+                total_amount: total,
+                notes
+            }])
+            .select()
+            .single();
+
+        if (error) throw error;
+        res.json({ success: true, settlementId: data.id });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al procesar liquidación' });
     }
 });
 
