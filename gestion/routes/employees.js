@@ -21,7 +21,7 @@ router.post('/', verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-// Register work log
+// Register work log (legacy - keeps existing functionality)
 router.post('/work-log', verifyToken, isAdmin, async (req, res) => {
     const { employee_id, days_worked, period_start, period_end, total_payment } = req.body;
     try {
@@ -38,6 +38,121 @@ router.post('/work-log', verifyToken, isAdmin, async (req, res) => {
         res.status(500).json({ error: 'Error al registrar días trabajados' });
     }
 });
+
+// Delete a work log entry
+router.delete('/work-log/:logId', verifyToken, isAdmin, async (req, res) => {
+    try {
+        const { logId } = req.params;
+
+        // 1. Fetch the log to get employee_id and date range
+        const { data: log, error: fetchError } = await db
+            .from('employee_work_logs')
+            .select('*')
+            .eq('id', logId)
+            .single();
+
+        if (fetchError) throw fetchError;
+
+        if (log) {
+            // 2. Delete individual worked days in that range for that employee
+            const { error: daysError } = await db
+                .from('employee_worked_days')
+                .delete()
+                .eq('employee_id', log.employee_id)
+                .gte('work_date', log.period_start)
+                .lte('work_date', log.period_end);
+
+            if (daysError) throw daysError;
+        }
+
+        // 3. Delete the log entry
+        const { error } = await db
+            .from('employee_work_logs')
+            .delete()
+            .eq('id', logId);
+
+        if (error) throw error;
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Delete work log error:', error);
+        res.status(500).json({ error: 'Error al eliminar registro y sincronizar días' });
+    }
+});
+
+
+// Get worked days for an employee (for calendar display)
+router.get('/:id/worked-days', verifyToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { data: days, error } = await db
+            .from('employee_worked_days')
+            .select('*')
+            .eq('employee_id', id)
+            .order('work_date', { ascending: false });
+
+        if (error) throw error;
+        res.json(days);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener días trabajados' });
+    }
+});
+
+// Save worked days (toggle on/off)
+router.post('/:id/worked-days', verifyToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { dates, daily_rate } = req.body; // dates is an array of date strings
+
+        // Get employee info
+        const { data: employee, error: empError } = await db
+            .from('employees')
+            .select('daily_salary')
+            .eq('id', id)
+            .single();
+
+        if (empError) throw empError;
+        const rate = daily_rate || employee.daily_salary;
+
+        // Insert each date (ignore duplicates)
+        const inserts = dates.map(date => ({
+            employee_id: parseInt(id),
+            work_date: date,
+            daily_rate: rate,
+            status: 'pending'
+        }));
+
+        const { data, error } = await db
+            .from('employee_worked_days')
+            .upsert(inserts, { onConflict: 'employee_id,work_date', ignoreDuplicates: false })
+            .select();
+
+        if (error) throw error;
+        res.json({ success: true, count: data.length });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al guardar días trabajados' });
+    }
+});
+
+// Delete a worked day
+router.delete('/:id/worked-days/:date', verifyToken, isAdmin, async (req, res) => {
+    try {
+        const { id, date } = req.params;
+        const { error } = await db
+            .from('employee_worked_days')
+            .delete()
+            .eq('employee_id', id)
+            .eq('work_date', date);
+
+        if (error) throw error;
+        res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al eliminar día' });
+    }
+});
+
 
 // Register cesantía
 router.post('/cesantias', verifyToken, isAdmin, async (req, res) => {
@@ -71,6 +186,25 @@ router.get('/', verifyToken, isAdmin, async (req, res) => {
         res.status(500).json({ error: 'Error al listar empleados' });
     }
 });
+
+// Get work logs for a specific employee
+router.get('/:id/work-logs', verifyToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { data: logs, error } = await db
+            .from('employee_work_logs')
+            .select('*')
+            .eq('employee_id', id)
+            .order('period_end', { ascending: false });
+
+        if (error) throw error;
+        res.json(logs);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener historial de pagos' });
+    }
+});
+
 
 // Calculate settlement (Preview)
 router.get('/:id/calculate-settlement', verifyToken, isAdmin, async (req, res) => {

@@ -23,6 +23,7 @@ router.post('/', verifyToken, async (req, res) => {
         // Prepare items for batch insert
         const saleItems = items.map(item => ({
             sale_id: saleId,
+            product_id: item.product_id, // Added this
             product_name: item.product_name,
             quantity: item.quantity,
             price: item.price
@@ -137,16 +138,25 @@ router.get('/stats/by-category', verifyToken, isAdmin, async (req, res) => {
         // Fetch items
         const { data: items, error: iError } = await db
             .from('sale_items')
-            .select('product_id, quantity, price')
+            .select('product_id, product_name, quantity, price') // Added product_name
             .limit(2000);
 
         if (iError) throw iError;
 
         const summary = items.reduce((acc, item) => {
-            const cat = categoryMap[item.product_id] || 'Sin Categoría';
+            // Priority: product_id, fallback to finding by product_name
+            let category = 'Sin Categoría';
+            if (item.product_id && categoryMap[item.product_id]) {
+                category = categoryMap[item.product_id];
+            } else if (item.product_name) {
+                // Try finding by name in products map (case insensitive)
+                const prod = products.find(p => p.title && p.title.toLowerCase() === item.product_name.toLowerCase());
+                if (prod) category = prod.category;
+            }
+
             const total = item.quantity * item.price;
-            if (!acc[cat]) acc[cat] = 0;
-            acc[cat] += total;
+            if (!acc[category]) acc[category] = 0;
+            acc[category] += total;
             return acc;
         }, {});
 

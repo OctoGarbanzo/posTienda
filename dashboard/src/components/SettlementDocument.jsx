@@ -36,13 +36,13 @@ const SettlementDocument = ({ data }) => {
                     .no-print { display: none !important; }
                     #settlement-print { width: 100%; border: none; padding: 10mm; }
                 }
-                table { width: 100%; border-collapse: collapse; margin: 0; }
-                td { border: 1px solid black; padding: 4px 8px; vertical-align: middle; }
-                .label { font-weight: bold; width: 140px; }
-                .header-box { text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 20px; border: 1px solid black; padding: 5px; }
-                .sub-header { border-top: none; padding: 2px; }
-                .dots-line { border-bottom: 2px dotted black; height: 10px; margin: 15px 0; }
-                .signature-line { border-top: 1px solid black; width: 250px; text-align: left; margin-top: 40px; padding-top: 5px; }
+                #settlement-print table { width: 100%; border-collapse: collapse; margin: 0; }
+                #settlement-print td { border: 1px solid black; padding: 4px 8px; vertical-align: middle; }
+                #settlement-print .label { font-weight: bold; width: 140px; }
+                #settlement-print .header-box { text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 20px; border: 1px solid black; padding: 5px; }
+                #settlement-print .sub-header { border-top: none; padding: 2px; }
+                #settlement-print .dots-line { border-bottom: 2px dotted black; height: 10px; margin: 15px 0; }
+                #settlement-print .signature-line { border-top: 1px solid black; width: 250px; text-align: left; margin-top: 40px; padding-top: 5px; }
                 `}
             </style>
 
