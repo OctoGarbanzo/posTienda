@@ -9,6 +9,10 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req, res) => {
+    res.json({ message: 'Tiento API is running', health: '/api/health' });
+});
+
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', database: 'supabase' });
 });
