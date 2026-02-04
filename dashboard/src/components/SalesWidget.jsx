@@ -201,11 +201,13 @@ function SalesWidget({ user, onSaleSuccess }) {
 
             {/* Bottom Order Bar (Fixed Structure) */}
             <div className="bottom-bar glass" style={{
-                height: '180px',
-                padding: '16px 24px',
-                background: 'rgba(0,0,0,0.4)',
-                backdropFilter: 'blur(20px)',
-                borderTop: '1px solid rgba(255,255,255,0.1)'
+                height: '210px',
+                padding: '20px 32px',
+                background: 'rgba(10, 10, 10, 0.4)',
+                backdropFilter: 'blur(30px) saturate(180%)',
+                borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                display: 'flex',
+                gap: '40px'
             }}>
                 {/* Scrollable Bill Section */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
@@ -225,10 +227,10 @@ function SalesWidget({ user, onSaleSuccess }) {
                             </div>
                         ) : (
                             items.map(item => (
-                                <div key={item.product_id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <div style={{ width: '30px', fontWeight: '900', color: 'var(--accent)', fontSize: '16px' }}>{item.quantity}x</div>
-                                    <div style={{ flex: 1, fontSize: '16px', fontWeight: '600' }}>{item.product_name}</div>
-                                    <div style={{ fontSize: '16px', opacity: 0.9 }}>₡{(item.price * item.quantity).toLocaleString()}</div>
+                                <div key={item.product_id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                                    <div style={{ width: '40px', fontWeight: '900', color: 'var(--accent)', fontSize: '18px' }}>{item.quantity}x</div>
+                                    <div style={{ flex: 1, fontSize: '18px', fontWeight: '700', letterSpacing: '-0.2px' }}>{item.product_name}</div>
+                                    <div style={{ fontSize: '18px', fontWeight: '600', opacity: 0.95 }}>₡{(item.price * item.quantity).toLocaleString()}</div>
                                     <div style={{ display: 'flex', gap: '4px' }}>
                                         <button onClick={() => updateQuantity(item.product_id, -1)} className="qty-btn-small"><Minus size={10} /></button>
                                         <button onClick={() => updateQuantity(item.product_id, 1)} className="qty-btn-small"><Plus size={10} /></button>
@@ -264,18 +266,40 @@ function SalesWidget({ user, onSaleSuccess }) {
                             <span style={{ fontSize: '12px', fontWeight: '700', opacity: 0.6 }}>TOTAL</span>
                             <span style={{ fontSize: '1.8rem', fontWeight: '900', color: 'var(--accent)', lineHeight: 1 }}>₡{total.toLocaleString()}</span>
                         </div>
-                        <div style={{ display: 'flex', gap: '8px' }}>
+                        <div style={{ display: 'flex', gap: '12px', marginTop: '4px' }}>
                             <button
                                 className="glass-btn"
-                                style={{ flex: 1, height: '48px', fontSize: '12px', fontWeight: '700', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
+                                style={{
+                                    flex: 1,
+                                    height: '52px',
+                                    fontSize: '11px',
+                                    fontWeight: '800',
+                                    borderRadius: '14px',
+                                    border: '1px solid rgba(255,255,255,0.15)',
+                                    background: 'rgba(255,255,255,0.03)',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    transition: 'all 0.2s ease',
+                                    textTransform: 'uppercase'
+                                }}
                                 onClick={() => alert('Función de Facturación Electrónica en desarrollo')}
                                 disabled={items.length === 0}
                             >
-                                <Receipt size={14} /> Factura E.
+                                <Receipt size={16} /> <span style={{ marginTop: '2px' }}>Factura E.</span>
                             </button>
                             <button
                                 className="btn-primary"
-                                style={{ flex: 2, height: '48px', fontSize: '15px', fontWeight: '800', borderRadius: '12px', boxShadow: '0 4px 20px rgba(255, 179, 0, 0.2)' }}
+                                style={{
+                                    flex: 2.2,
+                                    height: '52px',
+                                    fontSize: '16px',
+                                    fontWeight: '800',
+                                    borderRadius: '14px',
+                                    boxShadow: '0 8px 30px rgba(255, 179, 0, 0.3)',
+                                    transition: 'all 0.3s ease'
+                                }}
                                 onClick={handleSubmit}
                                 disabled={loading || items.length === 0}
                             >

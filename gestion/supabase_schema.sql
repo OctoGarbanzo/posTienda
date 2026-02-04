@@ -85,3 +85,29 @@ CREATE TABLE IF NOT EXISTS cesantias (
 INSERT INTO users (username, password, role) 
 VALUES ('admin', '$2b$10$LkO1vjBTzSZk3vokUyPotejClVM4COK5QoQEI/5w5ir2EmSj5M.dW', 'admin')
 ON CONFLICT (username) DO NOTHING;
+
+-- Function to get most sold products
+CREATE OR REPLACE FUNCTION get_most_sold_products()
+RETURNS TABLE (product_name TEXT, total_qty BIGINT) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT si.product_name, SUM(si.quantity)::BIGINT as total_qty
+    FROM sale_items si
+    GROUP BY si.product_name
+    ORDER BY total_qty DESC
+    LIMIT 10;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to get sales by category
+CREATE OR REPLACE FUNCTION get_sales_by_category()
+RETURNS TABLE (category TEXT, total NUMERIC) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT p.category, SUM(si.quantity * si.price)::NUMERIC as total
+    FROM sale_items si
+    JOIN products p ON si.product_id = p.id
+    GROUP BY p.category
+    ORDER BY total DESC;
+END;
+$$ LANGUAGE plpgsql;

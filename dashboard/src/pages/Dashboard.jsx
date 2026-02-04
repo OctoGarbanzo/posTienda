@@ -17,6 +17,7 @@ function Dashboard({ user, onLogout }) {
     const [activeTab, setActiveTab] = useState('sales');
     const [recentSales, setRecentSales] = useState([]);
     const [paymentFilter, setPaymentFilter] = useState('Todos');
+    const [searchTerm, setSearchTerm] = useState('');
     const [topProducts, setTopProducts] = useState([]);
     const [categorySales, setCategorySales] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -248,33 +249,48 @@ function Dashboard({ user, onLogout }) {
                                 </div>
                             </div>
 
-                            <div className="glass card">
+                            <div className="glass card" style={{ marginBottom: '32px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                                    <h3 style={{ margin: 0 }}>Actividad Reciente</h3>
-                                    <button onClick={fetchRecentSales} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '12px', cursor: 'pointer', fontWeight: 'bold' }}>ACTUALIZAR</button>
+                                    <h3 style={{ margin: 0 }}>Historial de Ventas</h3>
+                                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                        <input
+                                            type="text"
+                                            placeholder="Buscar venta # o método..."
+                                            className="input-field"
+                                            style={{ margin: 0, padding: '8px 16px', width: '250px', fontSize: '13px' }}
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                        />
+                                        <button onClick={fetchAllData} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '12px', cursor: 'pointer', fontWeight: 'bold' }}>ACTUALIZAR</button>
+                                    </div>
                                 </div>
                                 {recentSales.length === 0 ? (
                                     <div style={{ padding: '40px', textAlign: 'center', border: '1px dashed var(--border)', borderRadius: '12px' }}>
                                         <p style={{ color: 'var(--text-secondary)' }}>No hay operaciones registradas todavía.</p>
                                     </div>
                                 ) : (
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                        {recentSales.map(sale => (
-                                            <div key={sale.id} className="glass" style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: '12px' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                                    <div style={{ background: 'var(--accent-glow)', padding: '8px', borderRadius: '8px' }}>
-                                                        <ShoppingCart size={16} color="var(--accent)" />
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                        {recentSales
+                                            .filter(s =>
+                                                s.id.toString().includes(searchTerm) ||
+                                                s.payment_method.toLowerCase().includes(searchTerm.toLowerCase())
+                                            )
+                                            .map(sale => (
+                                                <div key={sale.id} className="glass" style={{ padding: '10px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.03)' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                        <div style={{ background: 'var(--accent-glow)', padding: '8px', borderRadius: '8px' }}>
+                                                            <ShoppingCart size={14} color="var(--accent)" />
+                                                        </div>
+                                                        <div>
+                                                            <div style={{ fontSize: '13px', fontWeight: '700' }}>Orden #{sale.id}</div>
+                                                            <div style={{ fontSize: '10px', opacity: 0.5 }}>{new Date(sale.created_at).toLocaleString()} • <span style={{ color: 'var(--accent)' }}>{sale.payment_method}</span></div>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <div style={{ fontSize: '14px', fontWeight: '700' }}>Venta #{sale.id}</div>
-                                                        <div style={{ fontSize: '11px', opacity: 0.6 }}>{new Date(sale.created_at).toLocaleString()} • {sale.payment_method}</div>
+                                                    <div style={{ fontWeight: '800', color: 'var(--text-primary)', fontSize: '1.1rem' }}>
+                                                        ₡{Number(sale.total_amount).toLocaleString()}
                                                     </div>
                                                 </div>
-                                                <div style={{ fontWeight: '900', color: 'var(--accent)', fontSize: '1.2rem' }}>
-                                                    ₡{Number(sale.total_amount).toLocaleString()}
-                                                </div>
-                                            </div>
-                                        ))}
+                                            ))}
                                     </div>
                                 )}
                             </div>
