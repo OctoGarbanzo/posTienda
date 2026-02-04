@@ -125,20 +125,25 @@ router.get('/stats/most-sold', verifyToken, isAdmin, async (req, res) => {
 // Get sales by category
 router.get('/stats/by-category', verifyToken, isAdmin, async (req, res) => {
     try {
-        // We need to join sale_items with products to get categories
-        const { data: items, error } = await db
+        // Fetch products first to have a map of id -> category
+        const { data: products, error: pError } = await db.from('products').select('id, category');
+        if (pError) throw pError;
+
+        const categoryMap = products.reduce((acc, p) => {
+            acc[p.id] = p.category;
+            return acc;
+        }, {});
+
+        // Fetch items
+        const { data: items, error: iError } = await db
             .from('sale_items')
-            .select(`
-                quantity,
-                price,
-                products (category)
-            `)
+            .select('product_id, quantity, price')
             .limit(2000);
 
-        if (error) throw error;
+        if (iError) throw iError;
 
         const summary = items.reduce((acc, item) => {
-            const cat = item.products?.category || 'Sin Categoría';
+            const cat = categoryMap[item.product_id] || 'Sin Categoría';
             const total = item.quantity * item.price;
             if (!acc[cat]) acc[cat] = 0;
             acc[cat] += total;
@@ -147,7 +152,7 @@ router.get('/stats/by-category', verifyToken, isAdmin, async (req, res) => {
 
         res.json(Object.entries(summary).map(([name, total]) => ({ category: name, total })));
     } catch (error) {
-        console.error(error);
+        console.error('Category stats error:', error);
         res.status(500).json({ error: 'Error al obtener ventas por categoría' });
     }
 });
