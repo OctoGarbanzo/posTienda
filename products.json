@@ -1,0 +1,675 @@
+{
+  "settings": {
+    "storeName": "Tiento Soda & Café",
+    "whatsapp": "+506 8799 5959",
+    "primaryColor": "#FFA500",
+    "bgColor": "#ffffff"
+  },
+  "products": [
+    {
+      "id": "burg_1",
+      "title": "Hamburguesa Sencilla",
+      "price": "1700",
+      "description": "Torta 100% Casera",
+      "category": "Hamburguesas",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "burg_2",
+      "title": "Hamburguesa con papas",
+      "price": "2500",
+      "description": "Torta 100% Casera, incluye papas",
+      "category": "Hamburguesas",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "burg_3",
+      "title": "Hamburguesa Especial",
+      "price": "3500",
+      "description": "Torta 100% Casera, especial",
+      "category": "Hamburguesas",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "burg_4",
+      "title": "Hamburguesa Triple Carne",
+      "price": "4000",
+      "description": "Torta 100% Casera, tres carnes",
+      "category": "Hamburguesas",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "burg_5",
+      "title": "Hamburguesa Tiento",
+      "price": "4500",
+      "description": "La especialidad de la casa. Torta 100% Casera.",
+      "category": "Hamburguesas",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&h=300&fit=crop"
+        }
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "burg_6",
+      "title": "Hamburguesa Mechada",
+      "price": "2000",
+      "description": "Carne mechada",
+      "category": "Hamburguesas",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "burg_7",
+      "title": "Hamburguesa Mechada con papas",
+      "price": "3000",
+      "description": "Carne mechada, incluye papas",
+      "category": "Hamburguesas",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "chk_1",
+      "title": "Hamburguesa de Pollo",
+      "price": "2500",
+      "description": "Deliciosa torta de pollo",
+      "category": "Pollo",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "chk_2",
+      "title": "Hamburguesa de Pollo con papas",
+      "price": "3500",
+      "description": "Hamburguesa de pollo acompañada de papas",
+      "category": "Pollo",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1562967914-608f82629710?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "chk_3",
+      "title": "Hamburguesa de Pollo Especial",
+      "price": "4500",
+      "description": "Hamburguesa de pollo con ingredientes especiales",
+      "category": "Pollo",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "chk_4",
+      "title": "Nuggets con papas",
+      "price": "3500",
+      "description": "Nuggets de pollo crujientes con papas",
+      "category": "Pollo",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1562967916-eb82221dfb44?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "chk_5",
+      "title": "Nuggets Supremos",
+      "price": "4500",
+      "description": "Nuggets preparados estilo supremo",
+      "category": "Pollo",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1585325701165-351af916e581?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "raspa_1",
+      "title": "Raspa con carne",
+      "price": "3000",
+      "description": "Tradicional raspa con carne",
+      "category": "Raspa",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1624300629298-e9de39c13be5?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "raspa_2",
+      "title": "Raspa Especial",
+      "price": "4000",
+      "description": "Raspa con ingredientes extra",
+      "category": "Raspa",
+      "media": [
+        {
+          "url": "images/raspa espeial.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "nacho_1",
+      "title": "Nachos con carne",
+      "price": "3000",
+      "description": "Nachos crujientes con carne",
+      "category": "Nachos",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "nacho_2",
+      "title": "Nachos Especiales",
+      "price": "4000",
+      "description": "Nachos con todos los acompañamientos",
+      "category": "Nachos",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1582169296194-e4d644c48063?w=400&h=300&fit=crop"
+        }
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "chal_1",
+      "title": "Chalupa Sencilla",
+      "price": "2000",
+      "description": "Chalupa tradicional",
+      "category": "Chalupa",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "chal_2",
+      "title": "Chalupa con papas",
+      "price": "3000",
+      "description": "Chalupa acompañada de papas",
+      "category": "Chalupa",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "pata_1",
+      "title": "Orden de Patacones",
+      "price": "1500",
+      "description": "Patacones recién hechos",
+      "category": "Patacones",
+      "media": [
+        {
+          "url": "images/patacones tiento.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "pata_2",
+      "title": "Patacones con carne",
+      "price": "3000",
+      "description": "Patacones cubiertos de carne",
+      "category": "Patacones",
+      "media": [
+        {
+          "url": "images/patacones vision en vertical.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "pata_3",
+      "title": "Patacones Especiales",
+      "price": "4000",
+      "description": "Patacones arreglados",
+      "category": "Patacones",
+      "media": [
+        {
+          "url": "images/patacones tiento.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "taco_1",
+      "title": "Taco Carne o Pollo",
+      "price": "1700",
+      "description": "Tico taco de carne o pollo",
+      "category": "Tacos",
+      "media": [
+        {
+          "url": "images/taco tiento.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "taco_2",
+      "title": "Taco con papas",
+      "price": "2500",
+      "description": "Taco acompañado de papas",
+      "category": "Tacos",
+      "media": [
+        {
+          "url": "images/taco tiento.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "taco_3",
+      "title": "Taco Doble",
+      "price": "3200",
+      "description": "Doble porción",
+      "category": "Tacos",
+      "media": [
+        {
+          "url": "images/taco supremo.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "taco_4",
+      "title": "Taco Doble con papas",
+      "price": "3800",
+      "description": "Doble porción con papas",
+      "category": "Tacos",
+      "media": [
+        {
+          "url": "images/taco supremo.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "taco_5",
+      "title": "Taco Bomba",
+      "price": "3500",
+      "description": "Explosión de sabor",
+      "category": "Tacos",
+      "media": [
+        {
+          "url": "images/taco supremo.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "taco_6",
+      "title": "Taco de Camarón",
+      "price": "2500",
+      "description": "Delicioso taco de camarón",
+      "category": "Tacos",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "taco_7",
+      "title": "Taco de Camarón con papas",
+      "price": "3500",
+      "description": "Taco de camarón acompañado de papas",
+      "category": "Tacos",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=400&h=300&fit=crop"
+        }
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "pap_1",
+      "title": "Orden de papas",
+      "price": "1500",
+      "description": "Papas fritas clásicas",
+      "category": "Papas",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "pap_2",
+      "title": "Salchipapas",
+      "price": "2800",
+      "description": "Papas con salchicha",
+      "category": "Papas",
+      "media": [
+        {
+          "url": "images/salchi papi carne.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "pap_3",
+      "title": "Papicarne",
+      "price": "3000",
+      "description": "Papas con carne",
+      "category": "Papas",
+      "media": [
+        {
+          "url": "images/salchi papi carne.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "pap_4",
+      "title": "Salchipapicarne",
+      "price": "3300",
+      "description": "La combinación completa: papas, salchicha y carne",
+      "category": "Papas",
+      "media": [
+        {
+          "url": "images/salchi papi carne.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "sand_1",
+      "title": "Sandwich de Carne",
+      "price": "1800",
+      "description": "Sandwich preparado con carne",
+      "category": "Sandwich",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "sand_2",
+      "title": "Sandwich de Carne con papas",
+      "price": "2800",
+      "description": "Sandwich de carne y papas",
+      "category": "Sandwich",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1481070555726-e2fe8357571d?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "sand_3",
+      "title": "Sandwich de Pollo",
+      "price": "2300",
+      "description": "Sandwich de pollo desmechado",
+      "category": "Sandwich",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1567234669003-dce7a7a88821?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "sand_4",
+      "title": "Sandwich de Pollo con papas",
+      "price": "3300",
+      "description": "Sandwich de pollo y papas",
+      "category": "Sandwich",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1539252554453-80ab65ce3586?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "sand_5",
+      "title": "Sandwich de Queso",
+      "price": "1800",
+      "description": "Sandwich clásico de queso",
+      "category": "Sandwich",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1528736235302-52922df5c122?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "empa_1",
+      "title": "Empanada Sencilla",
+      "price": "1700",
+      "description": "Carne o Queso",
+      "category": "Empanadas",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "empa_2",
+      "title": "Empanada Arreglada",
+      "price": "2000",
+      "description": "Carne o Queso, arreglada",
+      "category": "Empanadas",
+      "media": [
+        {
+          "url": "images/Empanada Arreglada Tiento.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "empa_3",
+      "title": "Empanada Especial",
+      "price": "3000",
+      "description": "Carne o Queso, preparación especial",
+      "category": "Empanadas",
+      "media": [
+        {
+          "url": "images/Empanada Arreglada Tiento.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "gal_1",
+      "title": "Gallo Sencillo",
+      "price": "1500",
+      "description": "Carne mechada",
+      "category": "Gallos",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "gal_2",
+      "title": "Gallo con papas",
+      "price": "2800",
+      "description": "Carne mechada y papas",
+      "category": "Gallos",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "bat_1",
+      "title": "Batido en Agua",
+      "price": "1800",
+      "description": "Sabores: Fresa, Piña, Maracuyá, Limonada, Cas, Sandía, Guanábana. Opc: Hierbabuena.",
+      "category": "Bebidas",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1546173159-315724a31696?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "bat_2",
+      "title": "Batido en Leche",
+      "price": "2600",
+      "description": "Sabores: Fresa, Guanábana, Chocolate, Caramelo, Nutella, Oreo",
+      "category": "Bebidas",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1579954115563-e72bf1381629?w=400&h=300&fit=crop"
+        }
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "cafe_1",
+      "title": "Café Negro",
+      "price": "1000",
+      "description": "Café negro caliente",
+      "category": "Café & Calientes",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1497515114629-f71d768fd07c?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "cafe_2",
+      "title": "Café con leche",
+      "price": "1300",
+      "description": "Café con leche caliente",
+      "category": "Café & Calientes",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "cafe_3",
+      "title": "Capuchino",
+      "price": "1700",
+      "description": "Espresso y leche espumada",
+      "category": "Café & Calientes",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "cafe_4",
+      "title": "Café Tiento",
+      "price": "2600",
+      "description": "La especialidad de la casa",
+      "category": "Café & Calientes",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=400&h=300&fit=crop"
+        }
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "frio_1",
+      "title": "Café Frío - Crema Irlandesa",
+      "price": "2600",
+      "description": "Café frío sabor Crema Irlandesa",
+      "category": "Café Frío",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "frio_2",
+      "title": "Café Frío - Chocolate",
+      "price": "2600",
+      "description": "Café frío sabor Chocolate",
+      "category": "Café Frío",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "frio_3",
+      "title": "Café Frío - Caramelo",
+      "price": "2600",
+      "description": "Café frío sabor Caramelo",
+      "category": "Café Frío",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1592663527359-cf6642f54e83?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "frio_4",
+      "title": "Café Frío - Vainilla",
+      "price": "2600",
+      "description": "Café frío sabor Vainilla",
+      "category": "Café Frío",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "kid_1",
+      "title": "Perro Caliente",
+      "price": "1500",
+      "description": "Menú de Niños",
+      "category": "Niños",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1612392062126-3e9f5a087e27?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "kid_2",
+      "title": "Salchipapas (Niños)",
+      "price": "2000",
+      "description": "Menú de Niños",
+      "category": "Niños",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=400&h=300&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "kid_3",
+      "title": "Nuggets de Pollo (Niños)",
+      "price": "3000",
+      "description": "Menú de Niños",
+      "category": "Niños",
+      "media": [
+        {
+          "url": "https://images.unsplash.com/photo-1562967914-608f82629710?w=400&h=300&fit=crop"
+        }
+      ]
+    }
+  ]
+}

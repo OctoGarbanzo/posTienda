@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiento Soda & Café</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="app-header">
+        <div class="container header-content">
+            <h1 id="store-name">Tiento Soda & Café</h1>
+            <div class="header-actions">
+                <button id="cart-toggle" class="cart-btn-enhanced">
+                    <div class="cart-icon-wrapper">
+                        <i class="fas fa-shopping-basket"></i>
+                        <span id="cart-count" class="cart-count-badge">0</span>
+                    </div>
+                    <div class="cart-total-preview">
+                        <span class="cart-total-label">Total:</span>
+                        <span id="cart-total-header">₡0</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div class="container search-container">
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="search-input" placeholder="Buscar en Tiento...">
+            </div>
+        </div>
+
+        <div class="container tabs-container">
+            <div id="category-tabs" class="tabs-scroll">
+                <button class="tab-btn active" data-category="all">Todos</button>
+                <!-- Categories injected here -->
+            </div>
+        </div>
+    </header>
+
+    <main class="container main-content">
+
+        <section id="featured-section" class="featured-section hidden-init">
+            <h2 class="section-title">Artículos destacados</h2>
+            <div id="featured-grid" class="featured-carousel">
+                <!-- Featured Products Injected Here -->
+            </div>
+        </section>
+
+        <section id="menu-section">
+            <h2 class="section-title" id="menu-title">Menú</h2>
+            <div id="product-grid" class="product-list">
+                <!-- Products injected here -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Product Detail Modal -->
+    <div id="product-modal" class="product-modal hidden-init">
+        <div class="modal-content">
+            <div class="modal-gallery">
+                <div id="carousel-container" class="zoom-container">
+                    <!-- Media Items Injected Here -->
+                </div>
+                <div id="modal-dots" class="modal-dots"></div>
+            </div>
+            <div class="modal-info">
+                <div class="modal-header-row">
+                    <h2 id="modal-title" class="modal-title"></h2>
+                    <button id="close-modal" class="modal-close"><i class="fas fa-times"></i></button>
+                </div>
+
+                <div id="modal-desc" class="modal-desc"></div>
+                <div id="modal-price" class="modal-price"></div>
+
+                <div id="modal-sizes-container">
+                    <!-- Sizes injected if applicable -->
+                </div>
+
+                <div class="modal-footer-actions">
+                    <div class="quantity-selector">
+                        <button id="qty-minus" class="qty-btn"><i class="fas fa-minus"></i></button>
+                        <input type="number" id="qty-input" value="1" min="1" readonly>
+                        <button id="qty-plus" class="qty-btn"><i class="fas fa-plus"></i></button>
+                    </div>
+
+                    <button id="modal-add-btn" class="add-btn-primary">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="cart-modal hidden-init">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Tu Pedido</h2>
+                <button id="close-cart" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="cart-items" class="cart-items">
+                <!-- Cart items injected here -->
+                <p class="empty-cart-msg">Tu carrito está vacío</p>
+            </div>
+            <div class="cart-footer">
+                <div class="total-row">
+                    <span>Total</span>
+                    <span id="cart-total">₡0.00</span>
+                </div>
+                <button id="checkout-btn" class="checkout-btn">
+                    <span>Ordenar por WhatsApp</span>
+                    <i class="fab fa-whatsapp"></i>
+                </button>
+                <button id="new-order-btn" class="new-order-btn">
+                    <i class="fas fa-trash-alt"></i>
+                    <span>Nueva Orden</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Order Button -->
+    <button id="floating-order-btn" class="floating-order-btn hidden-init">
+        <div class="floating-order-content">
+            <div class="floating-order-info">
+                <span class="floating-order-count"><span id="floating-count">0</span> artículos</span>
+                <span class="floating-order-total" id="floating-total">₡0</span>
+            </div>
+            <span class="floating-order-text">Ver Pedido</span>
+            <i class="fas fa-arrow-right"></i>
+        </div>
+    </button>
+
+    <script src="script.js?v=3.0"></script>
+</body>
+
+</html>
