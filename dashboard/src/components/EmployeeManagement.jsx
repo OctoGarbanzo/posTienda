@@ -8,9 +8,8 @@ function EmployeeManagement() {
     const [name, setName] = useState('');
     const [salary, setSalary] = useState('');
     const [cedula, setCedula] = useState('');
-    const [position, setPosition] = useState('');
-    const [contractType, setContractType] = useState('Tiempo Definido');
     const [paymentType, setPaymentType] = useState('Semanal');
+    const [hireDate, setHireDate] = useState(new Date().toISOString().split('T')[0]);
     const [loading, setLoading] = useState(false);
 
     // Work log helper state
@@ -44,7 +43,7 @@ function EmployeeManagement() {
             await api.post('/employees', {
                 name,
                 daily_salary: parseFloat(salary),
-                hire_date: new Date().toISOString().split('T')[0],
+                hire_date: hireDate,
                 cedula,
                 position,
                 contract_type: contractType,
@@ -141,6 +140,15 @@ function EmployeeManagement() {
         }
     };
 
+    const handleUpdateHireDate = async (empId, newDate) => {
+        try {
+            await api.put(`/employees/${empId}`, { hire_date: newDate });
+            fetchEmployees();
+        } catch (err) {
+            alert('Error al actualizar fecha de ingreso');
+        }
+    };
+
     return (
         <div className="animate-fade">
             <h1 className="title-amber">Gestión de Empleados</h1>
@@ -153,6 +161,11 @@ function EmployeeManagement() {
                         <input className="input-field" placeholder="Cédula" value={cedula} onChange={(e) => setCedula(e.target.value)} required />
                         <input className="input-field" placeholder="Cargo (ej: Cocinera, Salonero)" value={position} onChange={(e) => setPosition(e.target.value)} required />
                         <input className="input-field" type="number" placeholder="Salario diario (₡)" value={salary} onChange={(e) => setSalary(e.target.value)} required />
+
+                        <div style={{ marginBottom: '16px' }}>
+                            <label style={{ fontSize: '11px', opacity: 0.6, display: 'block', marginBottom: '4px' }}>Fecha de Ingreso</label>
+                            <input type="date" className="input-field" style={{ margin: 0 }} value={hireDate} onChange={(e) => setHireDate(e.target.value)} required />
+                        </div>
 
                         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
                             <div style={{ flex: 1 }}>
@@ -202,8 +215,14 @@ function EmployeeManagement() {
                                             </td>
                                             <td style={{ padding: '12px' }}>₡{Number(emp.daily_salary).toLocaleString()}</td>
                                             <td style={{ padding: '12px' }}>
-                                                {new Date(emp.hire_date).toLocaleDateString()}
-                                                {emp.exit_date && <div style={{ color: 'var(--error)', fontSize: '10px' }}>Salida: {new Date(emp.exit_date).toLocaleDateString()}</div>}
+                                                <input
+                                                    type="date"
+                                                    className="input-field"
+                                                    style={{ background: 'transparent', border: 'none', padding: 0, fontSize: '12px', margin: 0 }}
+                                                    value={new Date(emp.hire_date).toISOString().split('T')[0]}
+                                                    onChange={(e) => handleUpdateHireDate(emp.id, e.target.value)}
+                                                />
+                                                {emp.exit_date && <div style={{ color: 'var(--error)', fontSize: '10px', marginTop: '4px' }}>Salida: {new Date(emp.exit_date).toLocaleDateString()}</div>}
                                             </td>
                                             <td style={{ padding: '12px', display: 'flex', gap: '8px' }}>
                                                 {!emp.exit_date && (
@@ -227,7 +246,15 @@ function EmployeeManagement() {
                                                         </button>
                                                     </>
                                                 )}
-                                                {emp.exit_date && <span style={{ fontSize: '10px', opacity: 0.5 }}>Liquidado</span>}
+                                                {emp.exit_date && (
+                                                    <button
+                                                        className="glass"
+                                                        style={{ padding: '4px 8px', fontSize: '11px', color: 'var(--success)', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                                                        onClick={() => handleCalculateSettlement(emp)}
+                                                    >
+                                                        Re-imprimir
+                                                    </button>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}

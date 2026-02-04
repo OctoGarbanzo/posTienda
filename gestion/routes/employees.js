@@ -177,4 +177,24 @@ router.post('/:id/settle', verifyToken, isAdmin, async (req, res) => {
     }
 });
 
+// Update employee
+router.put('/:id', verifyToken, isAdmin, async (req, res) => {
+    const { id } = req.params;
+    const updates = req.body;
+    try {
+        const { data, error } = await db
+            .from('employees')
+            .update(updates)
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) throw error;
+        res.json({ success: true, employee: data });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al actualizar empleado' });
+    }
+});
+
 module.exports = router;
